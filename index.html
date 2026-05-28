@@ -1,25 +1,26 @@
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>
-evolution is my revolution - Login Portal
-</title>
+<title>LOGIN PORTAL</title>
 
 <style>
-
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
 }
 
-/* VIDEO */
+body{
+font-family:Courier New;
+overflow:hidden;
+}
 
-video#bg-video{
+/* VIDEO */
+#bg-video{
 position:fixed;
 top:0;
 left:0;
@@ -28,6 +29,7 @@ height:100%;
 object-fit:cover;
 z-index:-2;
 }
+
 /* OVERLAY */
 .overlay{
 position:fixed;
@@ -35,268 +37,201 @@ top:0;
 left:0;
 width:100%;
 height:100%;
-background:
-rgba(0,0,0,.55);
+background:rgba(0,0,0,.6);
 z-index:-1;
 }
+
 /* CONTENT */
 .content{
-position:fixed;
+position:absolute;
 top:50%;
 left:50%;
-transform:
-translate(-50%,-50%);
+transform:translate(-50%,-50%);
 width:90%;
-max-width:450px;
+max-width:400px;
 text-align:center;
-font-family:
-Courier New;
 color:white;
 }
+
 h1{
 font-size:2em;
-margin-bottom:25px;
-text-shadow:
-0 0 8px #00ff00;
-line-height:.5;
+margin-bottom:20px;
+text-shadow:0 0 10px #00ff00;
+line-height:1.2;
 }
+
 form{
 display:flex;
 flex-direction:column;
 gap:12px;
 }
+
 input{
-width:100%;
 padding:12px;
-border:
-1px solid #00ff00;
-border-radius:6px;
-background:
-rgba(0,0,0,.3);
+border:1px solid #00ff00;
+background:rgba(0,0,0,.4);
 color:white;
-font-size:1em;
-text-align:center;
+border-radius:5px;
 outline:none;
+font-size:16px;
+text-align:center;
 }
-input::placeholder{
-color:#ccc;
-}
+
 button{
-width:100%;
 padding:12px;
 background:#00ff00;
-color:black;
 border:none;
-border-radius:6px;
-font-size:1em;
+border-radius:5px;
+font-size:16px;
+font-weight:bold;
 cursor:pointer;
 transition:.3s;
 }
+
 button:hover{
 background:#00cc00;
-box-shadow:
-0 0 12px #00ff00;
+box-shadow:0 0 10px #00ff00;
+}
+
+.status{
+margin-top:15px;
+font-size:14px;
+color:#ffff00;
 }
 </style>
 </head>
+
 <body>
+
 <!-- VIDEO -->
-<video
-id="bg-video"
-autoplay
-muted
-loop
-playsinline>
-<source
-src=
-"Desain-tanpa-judul.mp4"
-type=
-"video/mp4">
+<video id="bg-video" autoplay muted loop playsinline>
+<source src="Desain-tanpa-judul.mp4" type="video/mp4">
 </video>
-<div class="overlay">
-</div>
+
+<div class="overlay"></div>
+
 <!-- AUDIO -->
-<audio
-autoplay
-loop>
-<source
-src=
-"Hymne-TNI-Angkatan-Udara.aac"
-type=
-"audio/mpeg">
+<audio autoplay loop>
+<source src="Hymne-TNI-Angkatan-Udara.aac" type="audio/mpeg">
 </audio>
+
 <!-- LOGIN -->
 <div class="content">
-<h1>
-KETUA RT/001
-</h1>
-<h1>
-DURI KOSAMBI
-</h1>
-<form
-onsubmit=
-"return loginSuccess(event)">
+
+<h1>KETUA RT/001</h1>
+<h1>DURI KOSAMBI</h1>
+
+<form id="loginForm">
+
 <input
 type="email"
-name="email"
+id="email"
 placeholder="Email"
-required
-autocomplete="off">
+required>
+
 <input
 type="password"
-name="password"
+id="password"
 placeholder="Password"
-required
-autocomplete="off">
-<button
-type="submit">
+required>
+
+<button type="submit">
 LOGIN
 </button>
+
 </form>
+
+<div class="status" id="status"></div>
+
 </div>
-<!-- FULLSCREEN -->
-<script>
-function forceFullscreen(){
-const elem=
-document.documentElement;
-if(
-elem.requestFullscreen
-){
-elem
-.requestFullscreen()
-.catch(()=>{});
-}
-}
-function isStandalone(){
-return(
-window.matchMedia(
-"(display-mode: standalone)"
-).matches
-||
-window.navigator
-.standalone===true
-);
-}
-if(
-isStandalone()
-){
-setTimeout(
-forceFullscreen,
-500
-);
-}
-if(
-navigator.userAgent
-.includes("wv")
-||
-navigator.userAgent
-.includes(
-"Android"
-)
-){
-setTimeout(
-forceFullscreen,
-800
-);
-}
-document
-.addEventListener(
-"click",
-function(){
-forceFullscreen();
-},
-{
-once:true
-}
-);
-</script>
+
 <!-- FIREBASE -->
 <script type="module">
-import {
-initializeApp
-}
-from
-"https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
 import {
 getAuth,
 signInWithEmailAndPassword
 }
-from
-"https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import {
-getDatabase,
-ref,
-get
-}
-from
-"https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+/* FIREBASE CONFIG */
 const firebaseConfig = {
+
 apiKey: "AIzaSyCuAf6lFAVhauAmzkRRnMKrkrtuk40Bxi4",
-  authDomain: "rt001-monitoring-database.firebaseapp.com",
-  projectId: "rt001-monitoring-database",
-  storageBucket: "rt001-monitoring-database.firebasestorage.app",
-  messagingSenderId: "1075136279822",
-  appId: "1:1075136279822:web:e62f99646db38043e9935f",
-  measurementId: "G-JXR25RVXJ4"
+
+authDomain: "rt001-monitoring-database.firebaseapp.com",
+
+projectId: "rt001-monitoring-database",
+
+storageBucket: "rt001-monitoring-database.firebasestorage.app",
+
+messagingSenderId: "1075136279822",
+
+appId: "1:1075136279822:web:e62f99646db38043e9935f",
+
+measurementId: "G-JXR25RVXJ4"
+
 };
-const app=
-initializeApp(
-firebaseConfig
-);
-const auth=
-getAuth(
-app
-);
-const db=
-getDatabase(
-app
-);
-window.loginSuccess=
-async function(
-event
-){
-event.preventDefault();
-const email=
-event.target
-.email
-.value
-.trim();
-const password=
-event.target
-.password
-.value
-.trim();
+
+/* INIT */
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+/* FORM */
+const form = document.getElementById("loginForm");
+
+const statusBox = document.getElementById("status");
+
+form.addEventListener("submit", async (e)=>{
+
+e.preventDefault();
+
+const email =
+document.getElementById("email").value.trim();
+
+const password =
+document.getElementById("password").value.trim();
+
+statusBox.innerHTML = "VERIFYING ACCESS...";
+
 try{
-await
-signInWithEmailAndPassword(
+
+await signInWithEmailAndPassword(
 auth,
 email,
 password
 );
-/* AMBIL URL DARI FIREBASE */
-const snap=
-await get(
-ref(
-db,
-"config/redirect"
-)
-);
-const target=
-snap.val();
-/* REDIRECT */
-window.location.href=
-target;
+
+statusBox.innerHTML = "ACCESS GRANTED ✔";
+
+setTimeout(()=>{
+
+window.location.href = "dashboard.html";
+
+},1000);
+
 }
-catch(e){
+catch(error){
+
+console.log(error);
+
+statusBox.innerHTML =
+"ACCESS DENIED ❌";
+
 alert(
-e.code+
-"\n\n"+
-e.message
+error.code + "\n\n" + error.message
 );
-console.log(e);
+
 }
-return false;
-}
+
+});
+
 </script>
+
 </body>
 </html>
+```
